@@ -1,13 +1,43 @@
 import { h, Component } from 'preact';
 import { Router } from 'preact-router';
 
+import NormalizedRoller from '../utilities/normal-roller';
 import Header from './header';
 
 // Code-splitting is automated for routes
-import Home from '../routes/home';
-import Profile from '../routes/profile';
+import Setup from '../routes/setup';
+import Outcomes from '../routes/outcomes';
+import Game from '../routes/game';
 
 export default class App extends Component {
+	state = {
+		currentRoll: 0,
+		outcomes: []
+	};
+	roller = new NormalizedRoller();
+
+	resetRolls = () => {
+		this.setState({
+			currentRoll: 0,
+			outcomes: []
+		});
+		this.roller = new NormalizedRoller();
+	};
+
+	rollDice = () => {
+		const newRoll = this.roller.getNextRoll();
+		this.setState({
+			currentRoll: newRoll,
+			outcomes: this.roller.getObservations()
+		});
+	};
+
+	simulate = (numRolls = 60) => {
+		for (let i = 0; i < 60; i++) {
+			this.roller.getNextRoll();
+		}
+		this.rollDice();
+	};
 	
 	/** Gets fired when the route changes.
 	 *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
@@ -17,14 +47,14 @@ export default class App extends Component {
 		this.currentUrl = e.url;
 	};
 
-	render() {
+	render(props, { currentRoll, outcomes }) {
 		return (
 			<div id="app">
 				<Header />
 				<Router onChange={this.handleRoute}>
-					<Home path="/" />
-					<Profile path="/profile/" user="me" />
-					<Profile path="/profile/:user" />
+					<Setup path="/" reset={this.resetRolls} />
+					<Game path="/game" currentRoll={currentRoll} rollDice={this.rollDice} />
+					<Outcomes path="/stats" outcomes={outcomes} simulate={this.simulate} />
 				</Router>
 			</div>
 		);
