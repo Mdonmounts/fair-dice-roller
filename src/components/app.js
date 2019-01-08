@@ -12,9 +12,12 @@ import Game from '../routes/game';
 export default class App extends Component {
 	state = {
 		currentRoll: 0,
-		outcomes: []
+		outcomes: [],
+		rollerSettings: {
+			randomChance: 0.3,
+			powerCo: 3
+		}
 	};
-	roller = new NormalizedRoller();
 
 	resetRolls = () => {
 		this.setState({
@@ -22,6 +25,17 @@ export default class App extends Component {
 			outcomes: []
 		});
 		this.roller = new NormalizedRoller();
+	};
+
+	changeRollerSetting = (newSettingObject) => {
+		const newRollerSettings = Object.assign({}, this.state.rollerSettings, newSettingObject);
+		this.setState({
+			rollerSettings: newRollerSettings
+		});
+	};
+
+	createRoller = () => {
+		this.roller = new NormalizedRoller(this.state.rollerSettings.randomChance, this.state.rollerSettings.powerCo);
 	};
 
 	rollDice = () => {
@@ -47,14 +61,18 @@ export default class App extends Component {
 		this.currentUrl = e.url;
 	};
 
+	componentDidMount() {
+		this.roller = this.createRoller();
+	}
+
 	render(props, { currentRoll, outcomes }) {
 		return (
 			<div id="app">
 				<Header />
 				<Router onChange={this.handleRoute}>
-					<Setup path="/" reset={this.resetRolls} />
+					<Setup path="/" rollerSettings={this.state.rollerSettings} reset={this.resetRolls} createRoller={this.createRoller} changeRollerSetting={this.changeRollerSetting} />
 					<Game path="/game" currentRoll={currentRoll} rollDice={this.rollDice} />
-					<Outcomes path="/stats" outcomes={outcomes} simulate={this.simulate} />
+					<Outcomes path="/stats" outcomes={outcomes} simulate={this.simulate} reset={this.resetRolls} />
 				</Router>
 			</div>
 		);

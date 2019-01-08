@@ -14,3 +14,7 @@
 :global(.ct-label) {
   color: white;
 }
+
+.button {
+    display: block
+}
