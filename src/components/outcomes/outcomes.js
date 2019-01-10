@@ -2,6 +2,8 @@ import { h } from 'preact';
 import style from './style.css';
 import ChartistGraph from 'react-chartist';
 import Button from 'preact-material-components/Button';
+import 'preact-material-components/Button/style.css';
+
 
 const Outcomes = ({ outcomes, simulate, reset }) => {
 	const chartData = {
@@ -15,7 +17,7 @@ const Outcomes = ({ outcomes, simulate, reset }) => {
 
 	return (
 		<div>
-			<h1>Rolls!</h1>
+			<h1>Try it out!</h1>
 			<Button className={style.button} onClick={simulate}>Simulate Game</Button>
 			<Button className={style.button} onClick={reset}>Reset Game</Button>
 			<ChartistGraph

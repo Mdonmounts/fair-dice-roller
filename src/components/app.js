@@ -1,3 +1,6 @@
+import 'preact-material-components/Theme/style.css';
+import 'preact-material-components/Button/style.css';
+
 import { h, Component } from 'preact';
 import { Router } from 'preact-router';
 
@@ -6,7 +9,6 @@ import Header from './header';
 
 // Code-splitting is automated for routes
 import Setup from '../routes/setup';
-import Outcomes from '../routes/outcomes';
 import Game from '../routes/game';
 
 export default class App extends Component {
@@ -62,7 +64,7 @@ export default class App extends Component {
 	};
 
 	componentDidMount() {
-		this.roller = this.createRoller();
+		this.createRoller();
 	}
 
 	render(props, { currentRoll, outcomes }) {
@@ -70,9 +72,10 @@ export default class App extends Component {
 			<div id="app">
 				<Header />
 				<Router onChange={this.handleRoute}>
-					<Setup path="/" rollerSettings={this.state.rollerSettings} reset={this.resetRolls} createRoller={this.createRoller} changeRollerSetting={this.changeRollerSetting} />
-					<Game path="/game" currentRoll={currentRoll} rollDice={this.rollDice} />
-					<Outcomes path="/stats" outcomes={outcomes} simulate={this.simulate} reset={this.resetRolls} />
+					<Game path="/" currentRoll={currentRoll} rollDice={this.rollDice} />
+					<Setup path="/setup" rollerSettings={this.state.rollerSettings} reset={this.resetRolls} createRoller={this.createRoller} changeRollerSetting={this.changeRollerSetting} outcomes={outcomes}
+						simulate={this.simulate}
+					/>
 				</Router>
 			</div>
 		);

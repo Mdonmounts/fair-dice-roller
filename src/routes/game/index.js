@@ -3,10 +3,9 @@ import style from './style';
 import Button from 'preact-material-components/Button';
 
 const Game = ({ currentRoll, rollDice }) => (
-    <div className={style.home}>
-        <h1>{currentRoll}</h1>
-        <Button outlined onClick={rollDice}>Roll the dice!</Button>
-    </div>
+	<div className={style.home}>
+		<Button outlined class={style.button} onClick={rollDice}>{currentRoll}</Button>
+	</div>
 );
 
 export default Game;
